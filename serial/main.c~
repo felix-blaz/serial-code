@@ -9,6 +9,3 @@
 #define Total_Cols 10
 
 #define GENERATIONS 5
-
-int main(){
-}
