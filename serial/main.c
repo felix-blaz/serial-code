@@ -1,5 +1,7 @@
+//header
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #define S 1
 #define E 2
 #define I 3
@@ -28,9 +30,7 @@ int getRandom(int max_val)
     return rand() % max_val;
 }
 
-
-
-     //initalise
+//initalise
 void initaliseWorld(int** currentWorld, int** futureWorld){
 	//phase 1 initalise World with just S cells
     for(int i = 0;  i < Total_Rows; i++)
@@ -40,11 +40,6 @@ void initaliseWorld(int** currentWorld, int** futureWorld){
 			currentWorld[i][j] = S;
          }
     }
-
-
-
-
-  
 //make one cell infected in a random position
 int r1 = getRandom(Total_Rows);
 int c1 = getRandom(Total_Cols);
@@ -56,163 +51,36 @@ currentWorld[r1][c1] = I;
 	    for(int j = 0; j < Total_Cols; j++)
         {
             futureWorld[i][j] = currentWorld[i][j];
-	    printf("%d", currentWorld[i][j]);
         }
-	    printf("%n");
     }
 
 }
 
-
-
-//neighbourSearch
-
-void neighbourSearch(int** currentWorld, int** futureWorld)
+//displayWoeldGen
+void displayWorldGeneration(int** currentWorld, int gen)
 {
-	for(int i =0; i < Total_Rows; i++)
+	char fileName[50] = "generation";
+	char genNumberString[50];
+	sprintf(genNumberString, "%d", gen);
+	strcat(fileName, genNumberString);
+	strcat(fileName, ".txt");
+
+	FILE* fout = fopen(fileName, "w");
+	for (int i = 0; i < Total_Rows; i++)
 	{
-	    for(int j = 0; j < Total_Cols; j++)
-        {
-	int numI = 0;
-	if(currentWorld[i][j] == S)
-	{
-		//explain
-		int left_neigh = j - 1;
-		int right_neigh = j + 1;
-		int upwords_neigh = i - 1;
-		int down_neigh = i + 1;
-
-		if (left_neigh < 0)
+		for (int j = 0; j < Total_Cols; j++)
 		{
-			left_neigh = Total_Cols - 1;
+			fprintf(fout, "%d ", currentWorld[i][j]);
 		}
-		if (right_neigh > Total_Cols - 1)
-		{
-			right_neigh = 0;
-		}
-
-		if (upwords_neigh < 0)
-		{
-			upwords_neigh = Total_Rows - 1;
-		}
-
-		if (down_neigh > Total_Rows - 1)
-		{
-			down_neigh = 0;
-		}
-
-
-					//Explain	
-					// left cell
-		if (currentWorld[i][left_neigh] == I)
-	      	{	
-		  numI++;
-      		}
-					// top left cell
-				if (currentWorld[upwords_neigh][left_neigh] == I)
-				  {
-					numI++;
-				  }
-					// bottom left cell
-				if (currentWorld[down_neigh][left_neigh] == I)
-				{
-					numI++;
-				}
-					// right cell
-				if (currentWorld[i][right_neigh] == I)
-				{
-					numI++;
-				}
-					// top right cell
-				if (currentWorld[upwords_neigh][right_neigh] == I)
-				{
-					numI++;
-				}
-					// bottom right cell
-				if (currentWorld[down_neigh][right_neigh] == I)
-				{
-					numI++;
-				}
-					// top cell
-				if (currentWorld[upwords_neigh][j] == I)
-				{
-					numI++;
-				}
-					// bottom cell
-				if (currentWorld[down_neigh][j] == I)
-				{
-					numI++;
-				}
-
-					//EXPLAIN
-				if (numI == 1 && getRandom(1001) <= ProbA * 1000)
-				{
-					futureWorld[i][j] = E;
-				}
-				
-				if (numI == 2 && getRandom(1001) <= ProbB * 1000) 
-				 {
-					futureWorld[i][j] = E;
-				 }
-				
-				if (numI == 3 && getRandom(1001) <= ProbC * 1000)
-				  {
-					futureWorld[i][j] = E;
-				  }
-
-				if (numI == 4 && getRandom(1001) <= ProbD * 1000)
-				  {
-					futureWorld[i][j] = E;
-				  }
-
-				if (numI == 5 && getRandom(1001) <= ProbE * 1000)
-				  {
-					futureWorld[i][j] = E;
-				  }
-
-                if (numI == 6 && getRandom(1001) <= ProbF * 1000)
-            	{
-					futureWorld[i][j] = E;
-	      	}
-
-				if (numI == 7 && getRandom(1001) <= ProbG * 1000)
-				  {
-					futureWorld[i][j] = E;
-			 	}
-
-				if (numI == 8 && getRandom(1001) <= ProbH * 1000) 
-				  {
-					futureWorld[i][j] = E;
-				}
-    }
-	//expain
-    else if (currentWorld[i][j] == E)
-    {
-        if (getRandom(1001) < ProbI * 1000) {
-		     futureWorld[i][j] = I;
-	    }
-    }
-	
-    else if (currentWorld[i][j] == I)
-	{
-		if (getRandom(1001) < ProbA * 1000) {
-			    futureWorld[i][j] = D;
-		}
-	else
-		{
-			futureWorld[i][j] = R;
-		}
+		fprintf(fout, "\n");
 	}
-	
-    else if (currentWorld[i][j] == R)
-       	{
-	       	futureWorld[i][j] = S;
-       	}
-        }
-    }
+		//closing the file
+	fclose(fout);
 }
 
 
+
+//cellCount
 void cellCount(int** currentWorld, int* countS, int* countI, int* countE,
 	int* countR, int* countD )
 {
@@ -275,9 +143,219 @@ int** createTwoDimenArray(const int rows, const int cols)
 }
 
 
+//neighbourSearch
+
+void neighbourSearch(int** currentWorld, int** futureWorld)
+{
+	for(int i =0; i < Total_Rows; i++)
+	{
+	    for(int j = 0; j < Total_Cols; j++)
+        {
+	int numI = 0;
+	if(currentWorld[i][j] == S)
+	{
+		//explain
+		int left_neigh = j - 1;
+		int right_neigh = j + 1;
+		int upwords_neigh = i - 1;
+		int down_neigh = i + 1;
+
+		if (left_neigh < 0)
+		{
+			left_neigh = Total_Cols - 1;
+		}
+		if (right_neigh > Total_Cols - 1)
+		{
+			right_neigh = 0;
+		}
+
+		if (upwords_neigh < 0)
+		{
+			upwords_neigh = Total_Rows - 1;
+		}
+
+		if (down_neigh > Total_Rows - 1)
+		{
+			down_neigh = 0;
+		}
+
+
+					//Explain	
+					// left cell
+				if (currentWorld[i][left_neigh] == I)
+				{	
+					numI++;
+				}
+					// top left cell
+				if (currentWorld[upwords_neigh][left_neigh] == I)
+				{
+					numI++;
+				}
+					// bottom left cell
+				if (currentWorld[down_neigh][left_neigh] == I)
+				{
+					numI++;
+				}
+					// right cell
+				if (currentWorld[i][right_neigh] == I)
+				{
+					numI++;
+				}
+					// top right cell
+				if (currentWorld[upwords_neigh][right_neigh] == I)
+				{
+					numI++;
+				}
+					// bottom right cell
+				if (currentWorld[down_neigh][right_neigh] == I)
+				{
+					numI++;
+				}
+					// top cell
+				if (currentWorld[upwords_neigh][j] == I)
+				{
+					numI++;
+				}
+					// bottom cell
+				if (currentWorld[down_neigh][j] == I)
+				{
+					numI++;
+				}
+
+					//EXPLAIN
+				if (numI == 1 && getRandom(1001) <= ProbA * 1000)
+				{
+					futureWorld[i][j] = E;
+				}
+				if (numI == 2 && getRandom(1001) <= ProbB * 1000) 
+                {
+					futureWorld[i][j] = E;
+                }
+				if (numI == 3 && getRandom(1001) <= ProbC * 1000)
+            	{
+					futureWorld[i][j] = E;
+				}
+
+				if (numI == 4 && getRandom(1001) <= ProbD * 1000)
+            	{
+					futureWorld[i][j] = E;
+				}
+
+				if (numI == 5 && getRandom(1001) <= ProbE * 1000)
+            	{
+					futureWorld[i][j] = E;
+				}
+
+                if (numI == 6 && getRandom(1001) <= ProbF * 1000)
+            	{
+					futureWorld[i][j] = E;
+				}
+
+				if (numI == 7 && getRandom(1001) <= ProbG * 1000)
+ 	            {
+					futureWorld[i][j] = E;
+			 	}
+
+				if (numI == 8 && getRandom(1001) <= ProbH * 1000) 
+                {
+					futureWorld[i][j] = E;
+				}
+    }
+	//expain
+    else if (currentWorld[i][j] == E)
+    {
+        if (getRandom(1001) < ProbI * 1000) {
+		     futureWorld[i][j] = I;
+	       }
+    }
+    else if (currentWorld[i][j] == I)
+	{
+		if (getRandom(1001) < ProbA * 1000) {
+			    futureWorld[i][j] = D;
+		}
+	else
+		{
+			futureWorld[i][j] = R;
+		}
+	}
+			else if (currentWorld[i][j] == R)
+			{
+				futureWorld[i][j] = S;
+			}
+        }
+    }
+}
+
+
+
+
+ 
+
+
+
+
 
 int main(int argc, char const *argv[])
 {
 
- 
+	int** currentWorld = createTwoDimenArray(Total_Rows, Total_Cols);
+	int** futureWorld = createTwoDimenArray(Total_Rows, Total_Cols);
+
+		//starting up the world
+	initaliseWorld (currentWorld, futureWorld);
+
+	printf("Simulating...\n");
+	FILE* fout = fopen("output.txt", "w");
+
+
+	int gen = 0;
+		//this will execute the total number of each type of cell in each gen to a file
+	while (gen < GENERATIONS)
+	{
+		// printf("Executing the generation %d\n",  gen);
+
+
+		neighbourSearch (currentWorld, futureWorld);
+		int countS = 0;
+		int countE = 0;
+		int countI = 0;
+		int countR = 0;
+		int countD = 0;
+		cellCount(futureWorld, &countS, &countI, &countE, &countR, &countD);
+
+
+		fprintf(fout, "Generation: %d and Suseptable: %d and Exposed: %d and Infected: %d and Recovered: %d and Dead: %d\n",
+			gen, countS, countE, countI, countR, countD);
+
+
+		displayWorldGeneration (futureWorld, gen + 1);
+
+		for (int i = 0; i < Total_Rows; i++)
+		{
+			for (int j = 0; j < Total_Cols; j++)
+			{
+				currentWorld[i][j] = futureWorld[i][j];
+			}
+
+		}
+		gen++;
+	}
+
+	fclose(fout);
+
+	printf("Finished Simulation\n");
+
+	free(currentWorld[0]);
+	free(currentWorld);
+
+	free(futureWorld[0]);
+	free(futureWorld);
+	
+	return 0;
 }
+
+
+
+
+
+

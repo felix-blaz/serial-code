@@ -1,0 +1,5 @@
+Generation: 0 and Suseptable: 98 and Exposed: 1 and Infected: 0 and Recovered: 1 and Dead: 0
+Generation: 1 and Suseptable: 99 and Exposed: 0 and Infected: 1 and Recovered: 0 and Dead: 0
+Generation: 2 and Suseptable: 98 and Exposed: 1 and Infected: 0 and Recovered: 1 and Dead: 0
+Generation: 3 and Suseptable: 99 and Exposed: 0 and Infected: 1 and Recovered: 0 and Dead: 0
+Generation: 4 and Suseptable: 98 and Exposed: 1 and Infected: 0 and Recovered: 1 and Dead: 0

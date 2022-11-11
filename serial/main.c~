@@ -213,6 +213,86 @@ void neighbourSearch(int** currentWorld, int** futureWorld)
 }
 
 
+void cellCount(int** currentWorld, int* countS, int* countI, int* countE,
+	int* countR, int* countD )
+{
+	//these values will be incremented when ever it cell is present
+	*countS = 0;
+	*countI = 0;
+	*countD = 0;
+	*countR = 0;
+	*countE = 0;
+
+	for (int i = 0; i < Total_Rows; i++)
+	{
+		for (int j = 0; j < Total_Cols; j++)
+		{
+
+			if (currentWorld[i][j] == S)
+			{
+				(*countS)++;
+			}
+			else if (currentWorld[i][j] == I)
+			{
+				(*countI)++;
+			}
+			else if (currentWorld[i][j] == E)
+			{
+				(*countE)++;
+			}
+			else if (currentWorld[i][j] == D)
+			{
+				(*countD)++;
+			}
+			else
+			{
+				(*countR)++;
+			}
+			//copying the current world to the future world
+
+		}
+	}
+	
+}
+
+void displayWorldGeneration(int** currentWorld, int gen)
+{
+	char fileName[50] = "generation";
+	char genNumberString[50];
+	sprintf(genNumberString, "%d", gen);
+	strcat(fileName, genNumberString);
+	strcat(fileName, ".txt");
+
+	FILE* fout = fopen(fileName, "w");
+	for (int i = 0; i < Total_Rows; i++)
+	{
+		for (int j = 0; j < Total_Cols; j++)
+		{
+			fprintf(fout, "%d ", currentWorld[i][j]);
+		}
+		fprintf(fout, "\n");
+	}
+		//closing the file
+	fclose(fout);
+}
+
+
+   // create a two-dimensional matrix dynamically
+int** createTwoDimenArray(const int rows, const int cols)
+{
+    // create two-d pointers
+    int** arr2D = (int**)malloc(rows * sizeof(int*));
+
+   	 // create the memory
+    int* memory = (int*)malloc(rows * cols * sizeof(int));
+
+   	 // adjust pointers with memory
+    for (int i = 0; i < rows; i++)
+    {
+        arr2D[i] = &memory[i * cols];
+    }
+    return arr2D;
+}
 
 
 
