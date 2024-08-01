@@ -1,2 +1,2 @@
 # serial-code
-# This code simulates the game of life in serial using c++
+# This code simulates the game of life in serial using c
